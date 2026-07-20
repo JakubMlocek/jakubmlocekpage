@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jakub Mlocek — Cybersecurity Engineer</title>
+<meta name="description" content="Jakub Mlocek — Cybersecurity Engineer with a strong background in systems administration. Portfolio, CV, and projects.">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="bg-glow" aria-hidden="true"></div>
+
+<header class="nav-wrap">
+  <nav class="nav container">
+    <a href="#home" class="brand"><span class="brand-bracket">&lt;</span>JM<span class="brand-bracket">/&gt;</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="nav-link active" data-nav>Home</a></li>
+      <li><a href="#education" class="nav-link" data-nav>Education</a></li>
+      <li><a href="#experience" class="nav-link" data-nav>Experience</a></li>
+      <li><a href="#projects" class="nav-link" data-nav>Projects</a></li>
+      <li><a href="#contact" class="nav-link" data-nav>Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section id="home" class="section hero">
+    <div class="container hero-grid">
+      <div class="hero-text reveal">
+        <p class="eyebrow">// whoami</p>
+        <h1>Jakub Mlocek</h1>
+        <p class="role-line">
+          <span id="roleTyped" class="role-typed"></span><span class="cursor" aria-hidden="true">|</span>
+        </p>
+        <p class="hero-desc">
+          Cybersecurity Engineer with a strong foundation in systems administration.
+          I secure infrastructure end-to-end — from hardening Linux/Windows environments
+          and managing networks, to threat detection, incident response, and building
+          resilient, well-monitored systems.
+        </p>
+        <div class="hero-actions">
+          <a href="assets/cv.pdf" class="btn btn-primary" download>
+            Download CV
+          </a>
+          <a href="#contact" class="btn btn-ghost">Get in touch</a>
+        </div>
+        <ul class="hero-socials">
+          <li><a href="https://github.com/JakubMlocek" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="#" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:contact@example.com">Email</a></li>
+        </ul>
+      </div>
+
+      <div class="hero-photo reveal">
+        <div class="photo-frame">
+          <!-- Replace this block with: <img src="assets/profile.jpg" alt="Jakub Mlocek"> -->
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.4">
+              <path d="M12 2 3 6v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V6l-9-4Z"/>
+              <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Add your photo<br><code>assets/profile.jpg</code></span>
+          </div>
+          <div class="photo-scan" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+    <a href="#education" class="scroll-cue" aria-label="Scroll down">
+      <span></span>
+    </a>
+  </section>
+
+  <!-- ============ EDUCATION ============ -->
+  <section id="education" class="section">
+    <div class="container">
+      <h2 class="section-title reveal"><span class="idx">01</span> Education</h2>
+      <ol class="timeline" id="educationList"></ol>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section id="experience" class="section alt">
+    <div class="container">
+      <h2 class="section-title reveal"><span class="idx">02</span> Experience</h2>
+      <ol class="timeline" id="experienceList"></ol>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-title reveal"><span class="idx">03</span> Projects</h2>
+      <p class="section-sub reveal">Selected work from my time in the field. More added as they ship.</p>
+      <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="section contact">
+    <div class="container contact-inner reveal">
+      <h2 class="section-title"><span class="idx">04</span> Contact</h2>
+      <p class="section-sub">Open to opportunities in cybersecurity and infrastructure. Reach out.</p>
+      <div class="contact-links">
+        <a href="mailto:contact@example.com" class="btn btn-primary">contact@example.com</a>
+        <a href="https://github.com/JakubMlocek" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+        <a href="#" class="btn btn-ghost" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>&copy; <span id="year"></span> Jakub Mlocek</span>
+    <span class="footer-dim">Built with HTML, CSS &amp; JS — hosted on GitHub Pages</span>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+
+<script src="js/main.js"></script>
+</body>
+</html>
