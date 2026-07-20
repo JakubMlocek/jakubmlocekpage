@@ -10,6 +10,23 @@ const EDUCATION = [
     org: "AGH University of Krakow",
     desc: "Graduate studies in cybersecurity, continuing on from the engineering degree below.",
     tags: ["Cybersecurity"],
+    detail: {
+      label: "graduate coursework highlights",
+      intro: "90-ECTS, 3-semester accredited graduate program (in progress). Coursework most relevant to the job market:",
+      items: [
+        "Purple Teaming — combined offensive/defensive exercises bridging red and blue team practice",
+        "Cybersecurity Operations — running and maturing security operations at scale",
+        "Threat Intelligence — collecting, analyzing, and operationalizing threat data",
+        "Detection & Analysis of Computer Threats — building and tuning detection capabilities",
+        "Post-Quantum Cryptography — cryptographic protocols resilient to quantum attacks",
+        "Digital Forensic Data Analysis — forensic examination of digital evidence",
+        "5G & 6G Network Security — securing next-generation mobile infrastructure",
+        "Enterprise Architecture & Risk Management — aligning security with business risk",
+        "Capture the Flag (CTF) — competitive, hands-on offensive security practice",
+        "Deep Learning for Cybersecurity Applications — applying AI/ML to detection and analysis",
+      ],
+      note: "Also included: a full master's thesis, plus dedicated R&D methodology and legal/ethics coursework in cybersecurity.",
+    },
   },
   {
     date: "Oct 2021 — Jan 2025",
