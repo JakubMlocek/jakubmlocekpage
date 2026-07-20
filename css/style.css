@@ -505,6 +505,88 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
   margin-top: 2px;
 }
 
+/* ---------- expandable detail panel (education, and future panels) ---------- */
+
+.detail-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--accent-2);
+  cursor: pointer;
+}
+.detail-toggle:hover,
+.detail-toggle:focus-visible {
+  color: var(--accent);
+}
+.detail-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.detail-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.detail-panel.open {
+  grid-template-rows: 1fr;
+}
+.detail-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+.detail-panel.open .detail-panel-inner {
+  padding-top: 16px;
+}
+
+.detail-intro {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: 0 0 10px;
+  max-width: 64ch;
+}
+.detail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  max-width: 64ch;
+}
+.detail-list li {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  padding-left: 18px;
+  position: relative;
+}
+.detail-list li::before {
+  content: '▹';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+.detail-note {
+  color: var(--text-dimmer);
+  font-size: 0.82rem;
+  font-style: italic;
+  margin: 12px 0 0;
+  max-width: 64ch;
+}
+
 /* ---------- projects ---------- */
 
 .projects-grid {

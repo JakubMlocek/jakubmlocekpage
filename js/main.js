@@ -17,6 +17,23 @@ const EDUCATION = [
     org: "AGH University of Krakow",
     desc: "Undergraduate engineering degree covering cybersecurity, networking, and operating systems.",
     tags: ["Cybersecurity"],
+    detail: {
+      label: "coursework highlights",
+      intro: "210-ECTS, 7-semester accredited engineering program. Coursework most relevant to the job market:",
+      items: [
+        "Penetration Testing — offensive methodology and hands-on exploitation labs",
+        "Incident Management: SOC & CERT — triage, monitoring, and response workflows",
+        "Critical Infrastructure & Industrial Control Systems Security — securing OT/ICS/IIoT environments",
+        "Cybersecurity & Cloud Computing — cloud-specific threat models and controls",
+        "Web & Mobile Application Security — AppSec across the SDLC",
+        "Cryptography & Cryptanalysis — applied cryptographic protocols and attacks",
+        "Digital Forensics & Post-Breach Analysis — evidence handling and incident reconstruction",
+        "Malware Analysis — static and dynamic analysis of malicious binaries",
+        "Open-Source Intelligence (OSINT) — reconnaissance and information-gathering techniques",
+        "National Cybersecurity System & Information Security Management — policy and ISO 27001-aligned governance",
+      ],
+      note: "Also included: a mandatory 4-week industry internship and a full engineering thesis project.",
+    },
   },
 ];
 
@@ -129,6 +146,26 @@ function renderTimelineBody(item) {
   return `<p class="timeline-desc">${item.desc}</p>`;
 }
 
+function renderDetailPanel(item) {
+  if (!item.detail) return "";
+  const { intro, items, note, label = "details" } = item.detail;
+  return `
+    <button type="button" class="detail-toggle" aria-expanded="false" data-label="${label}">
+      <span class="detail-toggle-label">Show ${label}</span>
+      <span class="detail-toggle-icon" aria-hidden="true">+</span>
+    </button>
+    <div class="detail-panel">
+      <div class="detail-panel-inner">
+        ${intro ? `<p class="detail-intro">${intro}</p>` : ""}
+        <ul class="detail-list">
+          ${items.map(i => `<li>${i}</li>`).join("")}
+        </ul>
+        ${note ? `<p class="detail-note">${note}</p>` : ""}
+      </div>
+    </div>
+  `;
+}
+
 function renderTimeline(containerId, items) {
   const el = document.getElementById(containerId);
   el.innerHTML = items.map(item => `
@@ -140,9 +177,24 @@ function renderTimeline(containerId, items) {
       <ul class="timeline-tags">
         ${item.tags.map(t => `<li>${t}</li>`).join("")}
       </ul>
+      ${renderDetailPanel(item)}
     </li>
   `).join("");
 }
+
+/* Expand/collapse for any ".detail-toggle" — reusable across timeline items,
+   project cards, or any future panel that follows this same markup pattern. */
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".detail-toggle");
+  if (!btn) return;
+  const panel = btn.nextElementSibling;
+  const label = btn.dataset.label || "details";
+  const expanded = btn.getAttribute("aria-expanded") === "true";
+  btn.setAttribute("aria-expanded", String(!expanded));
+  panel.classList.toggle("open", !expanded);
+  btn.querySelector(".detail-toggle-label").textContent = expanded ? `Show ${label}` : `Hide ${label}`;
+  btn.querySelector(".detail-toggle-icon").textContent = expanded ? "+" : "−";
+});
 
 function renderCertifications(containerId, items) {
   const el = document.getElementById(containerId);
