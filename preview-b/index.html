@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jakub Mlocek — Cybersecurity Engineer (Design B: SOC Console)</title>
+<meta name="description" content="Design direction B — a security-operations-console aesthetic.">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🟠</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="compare-banner">
+  Design preview <strong>B — SOC Console</strong> · not the live site ·
+  <a href="../">back to current site</a> · <a href="../preview-c/">see Design C</a>
+</div>
+
+<div class="bg-dots" aria-hidden="true"></div>
+
+<header class="nav-wrap">
+  <nav class="nav container">
+    <a href="#home" class="brand">JM<span class="brand-dot">●</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="nav-link active" data-nav>Overview</a></li>
+      <li><a href="#education" class="nav-link" data-nav>Education</a></li>
+      <li><a href="#experience" class="nav-link" data-nav>Experience</a></li>
+      <li><a href="#projects" class="nav-link" data-nav>Case Files</a></li>
+      <li><a href="#contact" class="nav-link" data-nav>Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section id="home" class="section hero">
+    <div class="container hero-grid">
+      <div class="hero-text reveal">
+        <p class="status-line"><span class="dot dot-ok"></span> STATUS: ACTIVE — OPEN TO OPPORTUNITIES</p>
+        <h1>Jakub Mlocek</h1>
+        <p class="role-line">Cybersecurity Engineer</p>
+        <p class="hero-desc">
+          I work across DevSecOps, Azure cloud security, and penetration testing —
+          wiring SAST/DAST into CI/CD, tuning Sentinel and WAF rules, and breaking
+          (then hardening) web, API, and IIoT systems.
+        </p>
+        <div class="hero-actions">
+          <a href="../assets/cv.pdf" class="btn btn-primary" download>Download CV</a>
+          <a href="#contact" class="btn btn-ghost">Get in touch</a>
+        </div>
+        <ul class="hero-socials">
+          <li><a href="https://github.com/JakubMlocek" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="https://pl.linkedin.com/in/jakub-m%C5%82ocek-239951228" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="mailto:jakub.mlocek01@gmail.com">Email</a></li>
+        </ul>
+      </div>
+
+      <div class="hero-panel reveal">
+        <div class="panel-frame">
+          <div class="panel-header">
+            <span class="panel-title">live_feed.log</span>
+            <span class="panel-dots"><i></i><i></i><i></i></span>
+          </div>
+          <ul class="panel-feed" id="liveFeed"></ul>
+        </div>
+        <div class="stat-tiles">
+          <div class="stat-tile"><span class="stat-num">2+</span><span class="stat-label">yrs in InfoSec</span></div>
+          <div class="stat-tile"><span class="stat-num">3</span><span class="stat-label">pentest surfaces</span></div>
+          <div class="stat-tile"><span class="stat-num">2</span><span class="stat-label">active certs</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EDUCATION ============ -->
+  <section id="education" class="section">
+    <div class="container">
+      <h2 class="section-title reveal"><span class="tab-label">Education</span></h2>
+      <div class="ticket-list" id="educationList"></div>
+      <div class="cert-strip reveal" id="certStrip"></div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section id="experience" class="section alt">
+    <div class="container">
+      <h2 class="section-title reveal"><span class="tab-label">Experience</span></h2>
+      <div class="ticket-list" id="experienceList"></div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section id="projects" class="section">
+    <div class="container">
+      <h2 class="section-title reveal"><span class="tab-label">Case Files</span></h2>
+      <p class="section-sub reveal">Selected engagements. More filed as they close.</p>
+      <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="section contact">
+    <div class="container contact-inner reveal">
+      <h2 class="section-title"><span class="tab-label">Contact</span></h2>
+      <p class="section-sub">Open to opportunities in cybersecurity and infrastructure. Reach out.</p>
+      <div class="contact-links">
+        <a href="mailto:jakub.mlocek01@gmail.com" class="btn btn-primary">jakub.mlocek01@gmail.com</a>
+        <a href="https://github.com/JakubMlocek" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://pl.linkedin.com/in/jakub-m%C5%82ocek-239951228" class="btn btn-ghost" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>&copy; <span id="year"></span> Jakub Mlocek</span>
+    <span class="footer-dim">Design direction B — preview only</span>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+
+<script src="main.js"></script>
+</body>
+</html>
