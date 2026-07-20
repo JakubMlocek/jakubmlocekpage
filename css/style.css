@@ -159,19 +159,17 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
 }
 
 .section-title {
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: clamp(1.3rem, 2.6vw, 1.7rem);
   display: flex;
   align-items: baseline;
-  gap: 14px;
+  gap: 12px;
   margin-bottom: 12px;
 }
 .section-title .idx {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
   color: var(--accent);
-  border: 1px solid var(--border-strong);
-  padding: 3px 8px;
-  border-radius: 6px;
+  font-weight: 700;
 }
 .section-sub {
   color: var(--text-dim);
@@ -409,6 +407,42 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
   font-size: 0.95rem;
   max-width: 62ch;
 }
+.timeline-groups {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 62ch;
+}
+.timeline-group-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-2);
+  margin-bottom: 4px;
+}
+.timeline-bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.timeline-bullets li {
+  color: var(--text-dim);
+  font-size: 0.93rem;
+  padding-left: 16px;
+  position: relative;
+}
+.timeline-bullets li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
 .timeline-tags {
   display: flex;
   flex-wrap: wrap;
@@ -425,6 +459,50 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
   border: 1px solid rgba(90, 209, 255, 0.22);
   padding: 3px 9px;
   border-radius: 6px;
+}
+
+/* ---------- certifications ---------- */
+
+.cert-strip {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px dashed var(--border-strong);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.cert-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.cert-icon {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-name {
+  font-weight: 600;
+  font-size: 0.94rem;
+}
+.cert-meta {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-top: 2px;
 }
 
 /* ---------- projects ---------- */

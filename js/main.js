@@ -5,58 +5,129 @@
 
 const EDUCATION = [
   {
-    date: "2020 — 2023",
-    title: "B.Sc. in Computer Science / Cybersecurity",
-    org: "Your University Name",
-    desc: "Replace with a short description: focus areas, thesis topic, notable coursework.",
-    tags: ["Networking", "Systems", "Security Fundamentals"],
+    date: "Mar 2025 — Jul 2026",
+    title: "Master's degree, Cybersecurity",
+    org: "AGH University of Krakow",
+    desc: "Graduate studies in cybersecurity, continuing on from the engineering degree below.",
+    tags: ["Cybersecurity"],
   },
   {
-    date: "2023",
-    title: "Add a certification (e.g. CompTIA Security+, CEH, OSCP)",
-    org: "Issuing organization",
-    desc: "One or two lines about what the certification covers and why it mattered to you.",
-    tags: ["Certification"],
+    date: "Oct 2021 — Jan 2025",
+    title: "Engineer's degree, Cybersecurity",
+    org: "AGH University of Krakow",
+    desc: "Undergraduate engineering degree covering cybersecurity, networking, and operating systems.",
+    tags: ["Cybersecurity"],
+  },
+];
+
+const CERTIFICATIONS = [
+  {
+    name: "Microsoft Certified: Azure Security Engineer Associate",
+    issuer: "Microsoft",
+    meta: "Issued Jan 2026 · Expires Jan 2027 · ID 67475B239E939146",
+  },
+  {
+    name: "GitHub Advanced Security",
+    issuer: "GitHub",
+    meta: "Issued Oct 2025 · Expires Oct 2027 · ID 4B1AD3-8763V1",
   },
 ];
 
 const EXPERIENCE = [
   {
-    date: "2023 — Present",
+    date: "Nov 2024 — Present",
     title: "Cybersecurity Engineer",
-    org: "Company Name",
-    desc: "Replace with real responsibilities: e.g. hardening infrastructure, running vulnerability assessments, incident response, SIEM/monitoring, security automation.",
-    tags: ["SOC", "SIEM", "Incident Response"],
+    org: "RBC Bearings · Kraków, Poland · Hybrid",
+    groups: [
+      {
+        label: "DevSecOps",
+        items: [
+          "Covered the platform with dynamic application security scanning (OWASP ZAP, SQLmap).",
+          "Covered repositories with static analysis via GitHub Advanced Security: CodeQL, Dependabot, Secret Scanning.",
+          "Conducted shift-left security assessments.",
+        ],
+      },
+      {
+        label: "Azure Cloud Security",
+        items: [
+          "Built Infrastructure as Code for Azure resources using Bicep.",
+          "Tuned Azure Web Application Firewall rules.",
+          "Authored Microsoft Sentinel analytics rules; investigated and resolved security incidents.",
+          "Queried and analyzed logs using KQL.",
+        ],
+      },
+      {
+        label: "Penetration Testing",
+        items: [
+          "Performed internal penetration tests across Web, API, and IIoT surfaces.",
+        ],
+      },
+      {
+        label: "Security Engagements",
+        items: [
+          "Ran cybersecurity awareness sessions and implemented ISO 27001 policies.",
+          "Completed client security assessments and biweekly platform security status reports.",
+        ],
+      },
+    ],
+    tags: ["DevSecOps", "Azure", "Sentinel", "Penetration Testing", "ISO 27001"],
   },
   {
-    date: "2020 — 2023",
-    title: "Systems Administrator",
-    org: "Previous Company Name",
-    desc: "Replace with real responsibilities: e.g. managing Linux/Windows server fleets, Active Directory, backups, network administration, automation scripting.",
-    tags: ["Linux", "Windows Server", "Active Directory"],
+    date: "Nov 2023 — Jun 2024",
+    title: "Junior IT Security Specialist — SOC L2",
+    org: "Comarch · Kraków, Poland",
+    bullets: [
+      "Implemented security monitoring using HIDS (Wazuh), SIEM (Splunk), and OSquery.",
+      "Managed system hardening and security configuration assessments per CIS benchmarks.",
+      "Reviewed phishing emails and performed malware analysis.",
+      "Administered and maintained Linux systems.",
+    ],
+    tags: ["Wazuh", "Splunk", "OSquery", "Linux", "CIS Benchmarks"],
   },
 ];
 
 const PROJECTS = [
   {
-    title: "Add your first project",
-    desc: "Short summary of what it does, the problem it solves, and your role building it.",
-    tags: ["Tag1", "Tag2"],
-    link: "#",
-    repo: "#",
+    title: "ConsultIT — Security Assessment Report",
+    desc: "Laureate project for the ConsultIT competition (SGH, with Accenture, LOT, P&G, Allegro, GFT). Advanced through a CTF qualifier, then analyzed a real company's systems, processes, and architecture in the final, proposing concrete security improvements.",
+    tags: ["CTF", "Security Assessment", "Team Project"],
+    // Write-up lives in a private repo (github.com/JakubMlocek/CTF) — make it public and set `repo` below to link it.
   },
   {
-    title: "Add another project",
-    desc: "Short summary of what it does, the problem it solves, and your role building it.",
-    tags: ["Tag1", "Tag2"],
-    link: "#",
-    repo: "#",
+    title: "HackAGH 2023 — Autonomous Vehicle App",
+    desc: "Finalist at HackAGH, a team hackathon organized by URSS AGH on autonomous-vehicle automotive tech. Devised a creative autonomous-car feature and built a mobile app prototype, presented live to a jury in the final.",
+    tags: ["Hackathon", "Mobile App", "Team Project"],
   },
 ];
 
 /* ==========================================================================
    Rendering
    ========================================================================== */
+
+function renderTimelineBody(item) {
+  if (item.groups) {
+    return `
+      <ul class="timeline-groups">
+        ${item.groups.map(g => `
+          <li>
+            <p class="timeline-group-label">${g.label}</p>
+            <ul class="timeline-bullets">
+              ${g.items.map(i => `<li>${i}</li>`).join("")}
+            </ul>
+          </li>
+        `).join("")}
+      </ul>
+    `;
+  }
+  if (item.bullets) {
+    return `
+      <ul class="timeline-bullets">
+        ${item.bullets.map(i => `<li>${i}</li>`).join("")}
+      </ul>
+    `;
+  }
+  return `<p class="timeline-desc">${item.desc}</p>`;
+}
 
 function renderTimeline(containerId, items) {
   const el = document.getElementById(containerId);
@@ -65,11 +136,30 @@ function renderTimeline(containerId, items) {
       <span class="timeline-date">${item.date}</span>
       <h3 class="timeline-title">${item.title}</h3>
       <p class="timeline-org">${item.org}</p>
-      <p class="timeline-desc">${item.desc}</p>
+      ${renderTimelineBody(item)}
       <ul class="timeline-tags">
         ${item.tags.map(t => `<li>${t}</li>`).join("")}
       </ul>
     </li>
+  `).join("");
+}
+
+function renderCertifications(containerId, items) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = items.map(c => `
+    <div class="cert-card">
+      <span class="cert-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 2 3 6v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V6l-9-4Z"/>
+          <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <div>
+        <p class="cert-name">${c.name}</p>
+        <p class="cert-meta">${c.issuer} · ${c.meta}</p>
+      </div>
+    </div>
   `).join("");
 }
 
@@ -100,6 +190,7 @@ function renderProjects(containerId, items) {
 }
 
 renderTimeline("educationList", EDUCATION);
+renderCertifications("certStrip", CERTIFICATIONS);
 renderTimeline("experienceList", EXPERIENCE);
 renderProjects("projectsGrid", PROJECTS);
 
@@ -109,9 +200,9 @@ renderProjects("projectsGrid", PROJECTS);
 
 const ROLES = [
   "Cybersecurity Engineer",
-  "Systems Administrator",
-  "Blue Team / Security Ops",
-  "Infrastructure Hardening",
+  "DevSecOps",
+  "Azure Cloud Security",
+  "Penetration Tester",
 ];
 
 (function typeLoop() {
