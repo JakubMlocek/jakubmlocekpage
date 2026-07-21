@@ -587,6 +587,30 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
   max-width: 64ch;
 }
 
+.detail-paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 68ch;
+}
+.detail-paragraphs p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: 0;
+}
+.detail-paragraphs strong {
+  color: var(--text);
+}
+.detail-paragraphs code,
+.detail-list code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--accent-2);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
 /* ---------- projects ---------- */
 
 .projects-grid {
