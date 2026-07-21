@@ -58,6 +58,71 @@
     }
   },
   {
+    "title": "SQLmap DAST – Automated SQL Injection Testing for Production APIs",
+    "desc": "Built a scheduled dynamic application security testing (DAST) pipeline that runs SQLMap against the company's own beta APIs every week, without anyone having to hand-craft a single request. Findings, evidence, and raw scan output are packaged into a report on every run, so injection risks in new endpoints get caught automatically instead of waiting on a manual pentest cycle.",
+    "tags": ["SQLMap", "DAST", "Python", "GitHub Actions", "OpenAPI"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "Each scan starts from the same OpenAPI schemas the API team already maintains: a GitHub Actions workflow authenticates as a GitHub App to pull the latest processed schema from a sister repository, then a Python request builder walks every path and method in that schema and synthesises a realistic HTTP request for each one, choosing sensible values by parameter name and type and, where possible, pulling real values back from the live API first so the generated request bodies look like genuine traffic rather than placeholder data.",
+        "Each request carries a short-lived bearer token obtained by logging in as a dedicated test account, plus a scanner-specific header that lets it through the WAF rules defined in a companion IaC repository. SQLMap then runs against every prepared request in batch mode with per-request timeouts, and its raw output is parsed to pull out vulnerable parameters, the injection technique, and the detected backend DBMS.",
+        "Results are compiled into a summary table, a full Markdown report, and a rendered PDF, alongside a machine-readable JSON result, all published as workflow artifacts with secrets and auth tokens stripped out before anything is stored. A dedicated cleanup job runs immediately afterwards to remove any test data the scan created, so the automation leaves no trace behind."
+      ]
+    }
+  },
+  {
+    "title": "OWASP ZAP DAST – Broad Vulnerability Scanning Wired into GitHub Code Scanning",
+    "desc": "Built a second, complementary DAST pipeline that runs OWASP ZAP's active and passive scanners against every major beta API surface (portal, admin portal, vendor portal, mobile, public, access controller, and provisioning), on demand from GitHub Actions, with results flowing straight into GitHub's code scanning tab rather than sitting in a report nobody opens.",
+    "tags": ["OWASP ZAP", "DAST", "GitHub Code Scanning", "SARIF", "GitHub Actions"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "Seven near-identical per-API workflows were consolidated into a single reusable workflow that each caller invokes with its own automation plan and report names. Every run authenticates as a GitHub App to fetch the latest OpenAPI schema, then obtains a bearer token from the API's own <code>/auth</code> endpoint, failing the run immediately, before any unauthenticated scanning happens, if a token can't be obtained, and masking that token so it never appears in logs or step outputs.",
+        "ZAP then runs the matching automation plan inside the official <code>zaproxy/zap-stable</code> container, with custom HTTP-sender scripts injecting the bearer token and a WAF-bypass header on every in-scope request, and a dedicated safety script rewriting the IDs on any state-changing request during the active scan so it can never modify or delete a real tester's data. Scan duration, rule timeouts, and thread count are tuned per plan to keep runs bounded.",
+        "Because ZAP's native JSON report doesn't map cleanly onto GitHub's SARIF format, a small custom GitHub Action was built to convert ZAP's findings into SARIF, which is what lets every scan's results show up as annotated alerts in the repository's Security tab instead of a report artifact that has to be opened by hand. A cleanup job removes any test data the scan created immediately afterwards, mirroring the same safety net used on the SQLmap side."
+      ]
+    }
+  },
+  {
+    "title": "External Penetration Testing Coordination",
+    "desc": "Acted as the internal owner of third-party penetration testing engagements with external security firms, driving each one end to end rather than handing it off after a kickoff call, from initial scoping through to the final retest.",
+    "tags": ["Penetration Testing", "Vendor Coordination", "Risk Triage"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "Defined test requirements and scope together with each vendor up front, translating what the business actually needed tested into a scope the testers could execute against, and prepared dedicated test environments, accounts, sample data, and network access, so testing could run safely without touching real customer data or disrupting production traffic.",
+        "Once a report came back, findings were reviewed in detail and triaged by real risk rather than taken at face value, then routed to the right engineering owners with enough context to act on them, not just a CVSS score and a screenshot.",
+        "After remediation, each engagement was closed out with a retest against the original findings to confirm the fixes actually held, and recurring patterns across engagements fed back into the company's baseline security posture, including WAF rules, RBAC configuration, and DAST tooling, rather than being treated as one-off findings."
+      ]
+    }
+  },
+  {
+    "title": "ISO 27001-Aligned Security Policy Program",
+    "desc": "Designed and stood up the company's information security policy framework essentially from a blank page, with no formal ISMS or documented security policies in place beforehand, aligned to ISO 27001's control domains.",
+    "tags": ["ISO 27001", "Security Governance", "Policy Design"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "Authored a full set of policies covering information security governance, access control, asset management, security awareness and training, backup and recovery, third-party and supplier risk, logging and monitoring, DevSecOps, vulnerability management, cloud security, and data protection and retention, then took ownership of driving each one from an initial draft through stakeholder review to an actual, tracked rollout rather than letting them sit as unused documents.",
+        "Each policy is tracked against a concrete implementation checklist rather than treated as finished once it's signed off. Several, including asset management and security awareness training, are already fully embedded into day-to-day operations, and the remainder are in active, staged rollout against a defined roadmap, with progress reviewed on a recurring basis.",
+        "Where a policy created a concrete technical requirement, implementation fed directly into the tooling built elsewhere: access control policy into the RBAC IaC pipeline, logging and monitoring policy into the SIEM and EDR rollout across the on-prem fleet, and vulnerability management policy into the SQLmap and ZAP DAST pipelines, so policy and engineering stayed in sync rather than diverging."
+      ]
+    }
+  },
+  {
+    "title": "EU Cyber Resilience Act (CRA) Compliance Program",
+    "desc": "Built the company's Cyber Resilience Act compliance program from the ground up, translating a brand-new EU regulation into a concrete, owned roadmap for an IoT product line spanning a web platform, mobile app, physical sensors, and gateways, including OEM-branded hardware. No CRA compliance work existed before this, and the regulation itself was new enough that there was no established internal playbook to build from.",
+    "tags": ["EU CRA", "Compliance", "SBOM", "Regulatory"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "The program is structured around the CRA's two real deadlines: a near-term Article 14 reporting obligation that becomes applicable in 2026, and full product conformity against Annex I, II, and VII by the final 2027 deadline.",
+        "Working from the regulation text and official EU guidance, broke the requirement down into a tracked checklist of roughly fifty individual controls, spanning vulnerability reporting and coordinated disclosure, SBOM and dependency management, incident response, secure-by-design and secure-by-default engineering practices, access control, data protection, logging, secure update delivery, supply chain and build-pipeline security, conformity assessment and CE marking, and the specific supplier-assurance obligations that apply to OEM-branded hardware.",
+        "On top of the checklist, consolidated the resulting documentation requirement into ten Technical File packages aligned to CRA Annex VII, each with a defined owner, evidence location, and priority, so audit-readiness work has a single structure to point to instead of being scattered across teams. Some of the underlying controls, like dependency and vulnerability scanning across the estate, were already in place from prior security engineering work and slotted directly into the new framework rather than needing to be rebuilt."
+      ]
+    }
+  },
+  {
     "title": "ConsultIT – Security Assessment Report",
     "desc": "Laureate project for the ConsultIT competition (SGH, with Accenture, LOT, P&G, Allegro, GFT). Advanced through a CTF qualifier, then analyzed a real company's systems, processes, and architecture in the final, proposing concrete security improvements.",
     "tags": ["CTF", "Security Assessment", "Team Project"],
