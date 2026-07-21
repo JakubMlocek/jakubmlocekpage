@@ -82,7 +82,23 @@
     <div class="container">
       <h2 class="section-title reveal"><span class="idx">$</span> ls ~/projects</h2>
       <p class="section-sub reveal">Selected work from my time in the field. More added as they ship.</p>
+
+      <div class="project-search reveal">
+        <span class="project-search-prompt">$ grep -i</span>
+        <input
+          type="text"
+          id="projectSearch"
+          class="project-search-input"
+          placeholder="ansible, sentinel, bicep..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Filter projects by keyword"
+        >
+        <span class="project-search-count" id="projectSearchCount"></span>
+      </div>
+
       <div class="projects-grid" id="projectsGrid"></div>
+      <p class="project-search-empty" id="projectSearchEmpty" hidden></p>
     </div>
   </section>
 

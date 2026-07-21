@@ -226,6 +226,60 @@ function renderProjects(containerId, items) {
   `;
 }
 
+/* ==========================================================================
+   Project search — filters cards by keyword against title, description,
+   and tags; matching tags get highlighted so it's obvious what hit.
+   ========================================================================== */
+
+function filterProjects(rawQuery) {
+  const query = rawQuery.trim().toLowerCase();
+  const grid = document.getElementById("projectsGrid");
+  if (!grid) return;
+  const cards = grid.querySelectorAll(".project-card:not(.placeholder)");
+  let visibleCount = 0;
+
+  cards.forEach((card, i) => {
+    const p = projectsData[i];
+    if (!p) return;
+
+    let tagMatch = false;
+    card.querySelectorAll(".project-tags li").forEach(li => {
+      const isMatch = query.length > 0 && li.textContent.toLowerCase().includes(query);
+      li.classList.toggle("tag-match", isMatch);
+      if (isMatch) tagMatch = true;
+    });
+
+    const isVisible = query.length === 0 ||
+      tagMatch ||
+      p.title.toLowerCase().includes(query) ||
+      p.desc.toLowerCase().includes(query);
+
+    card.classList.toggle("search-hidden", !isVisible);
+    if (isVisible) visibleCount++;
+  });
+
+  const placeholder = grid.querySelector(".project-card.placeholder");
+  if (placeholder) placeholder.classList.toggle("search-hidden", query.length > 0);
+
+  const countEl = document.getElementById("projectSearchCount");
+  const emptyEl = document.getElementById("projectSearchEmpty");
+  if (!countEl || !emptyEl) return;
+
+  if (query.length === 0) {
+    countEl.textContent = "";
+    emptyEl.hidden = true;
+  } else {
+    countEl.textContent = `${visibleCount} match${visibleCount === 1 ? "" : "es"}`;
+    emptyEl.hidden = visibleCount !== 0;
+    emptyEl.textContent = `grep: no matches for "${rawQuery.trim()}"`;
+  }
+}
+
+const projectSearchInput = document.getElementById("projectSearch");
+if (projectSearchInput) {
+  projectSearchInput.addEventListener("input", () => filterProjects(projectSearchInput.value));
+}
+
 async function fetchJSON(path) {
   const res = await fetch(path);
   if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
