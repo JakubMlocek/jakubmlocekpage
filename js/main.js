@@ -59,6 +59,24 @@ const EDUCATION = [
       note: "Also included: a mandatory 4-week industry internship and a full engineering thesis project.",
     },
   },
+  {
+    date: "Oct 2021 — Oct 2022",
+    title: "Technologies Security Programme",
+    org: "EITCA Academy",
+    desc: "Independent European IT security certification programme (EITCA/IS) covering cryptography, network security, and information security theory.",
+    tags: ["Cybersecurity", "Certification"],
+    detail: {
+      label: "programme highlights",
+      intro: "EITCA/IS Information Technologies Security Programme, European IT Certification Institute (EITCI), Brussels — 24 ECTS credits earned across component EITC certifications:",
+      items: [
+        "EITC/IS/CF Cryptography Fundamentals (98%) — ciphers, symmetric/asymmetric cryptosystems, PKI, digital signatures",
+        "EITC/CN/SCN1 Computer Networking 1 (87%) — network layers, TCP/IP, routing, secure protocols (SSL, IPsec, VPN)",
+        "EITC/IS/SMMOS Security Management in Microsoft Operating Systems (77%) — Windows hardening, Active Directory, access control, backup/recovery",
+        "EITC/IS/IST Information Security Theory (67%) — information theory, entropy, computational complexity, cryptographic foundations",
+      ],
+      note: "Certificate ID EITCA/IS/LEH25004484, issued February 2025 by the European IT Certification Institute (EITCI), Brussels.",
+    },
+  },
 ];
 
 const CERTIFICATIONS = [
