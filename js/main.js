@@ -105,51 +105,59 @@ const EXPERIENCE = [
     date: "Nov 2024 – Present",
     title: "Cybersecurity Engineer",
     org: "RBC Bearings · Kraków, Poland · Hybrid",
-    groups: [
-      {
-        label: "DevSecOps",
-        items: [
-          "Covered the platform with dynamic application security scanning (OWASP ZAP, SQLmap).",
-          "Covered repositories with static analysis via GitHub Advanced Security: CodeQL, Dependabot, Secret Scanning.",
-          "Conducted shift-left security assessments.",
-        ],
-      },
-      {
-        label: "Azure Cloud Security",
-        items: [
-          "Built Infrastructure as Code for Azure resources using Bicep.",
-          "Tuned Azure Web Application Firewall rules.",
-          "Authored Microsoft Sentinel analytics rules; investigated and resolved security incidents.",
-          "Queried and analyzed logs using KQL.",
-        ],
-      },
-      {
-        label: "Penetration Testing",
-        items: [
-          "Performed internal penetration tests across Web, API, and IIoT surfaces.",
-        ],
-      },
-      {
-        label: "Security Engagements",
-        items: [
-          "Ran cybersecurity awareness sessions and implemented ISO 27001 policies.",
-          "Completed client security assessments and biweekly platform security status reports.",
-        ],
-      },
-    ],
+    desc: "Covering DevSecOps, Azure cloud security, penetration testing, and security engagements across the company's platform and infrastructure.",
     tags: ["DevSecOps", "Azure", "Sentinel", "Penetration Testing", "ISO 27001"],
+    detail: {
+      label: "job details",
+      groups: [
+        {
+          label: "DevSecOps",
+          items: [
+            "Covered the platform with dynamic application security scanning (OWASP ZAP, SQLmap).",
+            "Covered repositories with static analysis via GitHub Advanced Security: CodeQL, Dependabot, Secret Scanning.",
+            "Conducted shift-left security assessments.",
+          ],
+        },
+        {
+          label: "Azure Cloud Security",
+          items: [
+            "Built Infrastructure as Code for Azure resources using Bicep.",
+            "Tuned Azure Web Application Firewall rules.",
+            "Authored Microsoft Sentinel analytics rules; investigated and resolved security incidents.",
+            "Queried and analyzed logs using KQL.",
+          ],
+        },
+        {
+          label: "Penetration Testing",
+          items: [
+            "Performed internal penetration tests across Web, API, and IIoT surfaces.",
+          ],
+        },
+        {
+          label: "Security Engagements",
+          items: [
+            "Ran cybersecurity awareness sessions and implemented ISO 27001 policies.",
+            "Completed client security assessments and biweekly platform security status reports.",
+          ],
+        },
+      ],
+    },
   },
   {
     date: "Nov 2023 – Jun 2024",
     title: "Junior IT Security Specialist – SOC L2",
     org: "Comarch · Kraków, Poland",
-    bullets: [
-      "Implemented security monitoring using HIDS (Wazuh), SIEM (Splunk), and OSquery.",
-      "Managed system hardening and security configuration assessments per CIS benchmarks.",
-      "Reviewed phishing emails and performed malware analysis.",
-      "Administered and maintained Linux systems.",
-    ],
+    desc: "SOC L2 analyst covering security monitoring, system hardening, and Linux administration.",
     tags: ["Wazuh", "Splunk", "OSquery", "Linux", "CIS Benchmarks"],
+    detail: {
+      label: "job details",
+      items: [
+        "Implemented security monitoring using HIDS (Wazuh), SIEM (Splunk), and OSquery.",
+        "Managed system hardening and security configuration assessments per CIS benchmarks.",
+        "Reviewed phishing emails and performed malware analysis.",
+        "Administered and maintained Linux systems.",
+      ],
+    },
   },
 ];
 
@@ -229,21 +237,23 @@ const PROJECTS = [
    Rendering
    ========================================================================== */
 
+function renderGroups(groups) {
+  return `
+    <ul class="timeline-groups">
+      ${groups.map(g => `
+        <li>
+          <p class="timeline-group-label">${g.label}</p>
+          <ul class="timeline-bullets">
+            ${g.items.map(i => `<li>${i}</li>`).join("")}
+          </ul>
+        </li>
+      `).join("")}
+    </ul>
+  `;
+}
+
 function renderTimelineBody(item) {
-  if (item.groups) {
-    return `
-      <ul class="timeline-groups">
-        ${item.groups.map(g => `
-          <li>
-            <p class="timeline-group-label">${g.label}</p>
-            <ul class="timeline-bullets">
-              ${g.items.map(i => `<li>${i}</li>`).join("")}
-            </ul>
-          </li>
-        `).join("")}
-      </ul>
-    `;
-  }
+  if (item.groups) return renderGroups(item.groups);
   if (item.bullets) {
     return `
       <ul class="timeline-bullets">
@@ -256,7 +266,7 @@ function renderTimelineBody(item) {
 
 function renderDetailPanel(item) {
   if (!item.detail) return "";
-  const { intro, items, paragraphs, note, label = "details" } = item.detail;
+  const { intro, items, paragraphs, groups, note, label = "details" } = item.detail;
   return `
     <button type="button" class="detail-toggle" aria-expanded="false" data-label="${label}">
       <span class="detail-toggle-label">Show ${label}</span>
@@ -265,6 +275,7 @@ function renderDetailPanel(item) {
     <div class="detail-panel">
       <div class="detail-panel-inner">
         ${intro ? `<p class="detail-intro">${intro}</p>` : ""}
+        ${groups ? renderGroups(groups) : ""}
         ${items ? `
           <ul class="detail-list">
             ${items.map(i => `<li>${i}</li>`).join("")}
