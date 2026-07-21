@@ -97,7 +97,9 @@ function toggleDetail(btn) {
    ========================================================================== */
 
 let projectsData = [];
+let certificationsData = [];
 const projectModal = document.getElementById("projectModal");
+const projectModalPanel = document.querySelector(".project-modal-panel");
 const projectModalBody = document.getElementById("projectModalBody");
 
 function renderModalBody(p) {
@@ -114,14 +116,27 @@ function renderModalBody(p) {
   `;
 }
 
-function openProjectModal(index) {
-  const p = projectsData[index];
-  if (!p) return;
-  projectModalBody.innerHTML = renderModalBody(p);
+function openModal() {
   projectModal.classList.add("open");
   projectModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
   projectModalBody.scrollTop = 0;
+}
+
+function openProjectModal(index) {
+  const p = projectsData[index];
+  if (!p) return;
+  projectModalPanel.classList.remove("image-mode");
+  projectModalBody.innerHTML = renderModalBody(p);
+  openModal();
+}
+
+function openCertModal(index) {
+  const c = certificationsData[index];
+  if (!c || !c.image) return;
+  projectModalPanel.classList.add("image-mode");
+  projectModalBody.innerHTML = `<img class="cert-modal-image" src="${c.image}" alt="${c.name} certificate">`;
+  openModal();
 }
 
 function closeProjectModal() {
@@ -137,9 +152,15 @@ document.addEventListener("click", (e) => {
   }
   if (e.target.closest("a")) return; // don't hijack real links (e.g. project Code/Live)
 
-  const card = e.target.closest(".project-card.has-detail");
-  if (card) {
-    openProjectModal(Number(card.dataset.projectIndex));
+  const projectCard = e.target.closest(".project-card.has-detail");
+  if (projectCard) {
+    openProjectModal(Number(projectCard.dataset.projectIndex));
+    return;
+  }
+
+  const certCard = e.target.closest(".cert-card.has-image");
+  if (certCard) {
+    openCertModal(Number(certCard.dataset.certIndex));
     return;
   }
 
@@ -152,10 +173,11 @@ document.addEventListener("keydown", (e) => {
 });
 
 function renderCertifications(containerId, items) {
+  certificationsData = items;
   const el = document.getElementById(containerId);
   if (!el) return;
-  el.innerHTML = items.map(c => `
-    <div class="cert-card">
+  el.innerHTML = items.map((c, i) => `
+    <div class="cert-card ${c.image ? "has-image" : ""}" ${c.image ? `data-cert-index="${i}"` : ""}>
       <span class="cert-icon">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M12 2 3 6v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V6l-9-4Z"/>
@@ -166,6 +188,7 @@ function renderCertifications(containerId, items) {
         <p class="cert-name">${c.name}</p>
         <p class="cert-meta">${c.issuer} · ${c.meta}</p>
       </div>
+      ${c.image ? `<span class="cert-view-hint" aria-hidden="true">View →</span>` : ""}
     </div>
   `).join("");
 }

@@ -473,6 +473,7 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
 }
 
 .cert-card {
+  position: relative;
   display: flex;
   gap: 14px;
   align-items: flex-start;
@@ -480,6 +481,30 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
   border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--surface);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.cert-card.has-image {
+  cursor: pointer;
+  padding-right: 84px;
+}
+.cert-card.has-image:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.cert-view-hint {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--accent-2);
+  white-space: nowrap;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.cert-card.has-image:hover .cert-view-hint {
+  color: var(--accent);
+  transform: translateY(-50%) translateX(3px);
 }
 
 .cert-icon {
@@ -804,6 +829,23 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
   font-size: 0.98rem;
   margin-bottom: 26px;
   max-width: 68ch;
+}
+
+/* Image mode: certificates. The certificate image already has its own
+   framing/branding, so the panel collapses to a plain, edge-to-edge frame. */
+.project-modal-panel.image-mode {
+  padding: 0;
+  width: min(720px, 100%);
+  line-height: 0;
+}
+.project-modal-panel.image-mode .project-modal-close {
+  background: rgba(10, 14, 19, 0.7);
+  backdrop-filter: blur(6px);
+}
+.cert-modal-image {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 body.modal-open {

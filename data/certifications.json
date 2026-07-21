@@ -2,11 +2,13 @@
   {
     "name": "Microsoft Certified: Azure Security Engineer Associate",
     "issuer": "Microsoft",
-    "meta": "Issued Jan 2026 · Expires Jan 2027 · ID 67475B239E939146"
+    "meta": "Issued Jan 2026 · Expires Jan 2027 · ID 67475B239E939146",
+    "image": "assets/certs/azure-security-engineer.jpg"
   },
   {
     "name": "GitHub Advanced Security",
     "issuer": "GitHub",
-    "meta": "Issued Oct 2025 · Expires Oct 2027 · ID 4B1AD3-8763V1"
+    "meta": "Issued Oct 2025 · Expires Oct 2027 · ID 24371AF8CAB04ACE",
+    "image": "assets/certs/github-advanced-security.jpg"
   }
 ]
