@@ -310,9 +310,7 @@ function renderTimeline(containerId, items) {
 
 /* Expand/collapse for any ".detail-toggle": reusable across timeline items,
    project cards, or any future panel that follows this same markup pattern. */
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".detail-toggle");
-  if (!btn) return;
+function toggleDetail(btn) {
   const panel = btn.nextElementSibling;
   const label = btn.dataset.label || "details";
   const expanded = btn.getAttribute("aria-expanded") === "true";
@@ -320,6 +318,15 @@ document.addEventListener("click", (e) => {
   panel.classList.toggle("open", !expanded);
   btn.querySelector(".detail-toggle-label").textContent = expanded ? `Show ${label}` : `Hide ${label}`;
   btn.querySelector(".detail-toggle-icon").textContent = expanded ? "+" : "−";
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest("a")) return; // don't hijack real links (e.g. project Code/Live)
+  const directBtn = e.target.closest(".detail-toggle");
+  const card = e.target.closest(".project-card");
+  const btn = directBtn || (card && card.querySelector(".detail-toggle"));
+  if (!btn) return;
+  toggleDetail(btn);
 });
 
 function renderCertifications(containerId, items) {
@@ -344,7 +351,7 @@ function renderCertifications(containerId, items) {
 function renderProjects(containerId, items) {
   const el = document.getElementById(containerId);
   el.innerHTML = items.map(p => `
-    <article class="project-card reveal">
+    <article class="project-card reveal ${p.detail ? "has-detail" : ""}">
       <div class="project-card-head">
         <span class="project-icon">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">

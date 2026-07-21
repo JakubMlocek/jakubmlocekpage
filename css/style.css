@@ -632,6 +632,9 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
   border-color: var(--accent);
   box-shadow: 0 16px 40px -18px rgba(53, 232, 194, 0.35);
 }
+.project-card.has-detail {
+  cursor: pointer;
+}
 .project-card-head {
   display: flex;
   justify-content: space-between;
