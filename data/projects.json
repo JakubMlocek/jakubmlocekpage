@@ -21,8 +21,14 @@
       "paragraphs": [
         "The provisioning layer uses the <code>bpg/proxmox</code> Terraform provider to clone new VMs from a cloud-init template, wiring up CPU, memory, disk, and networking, with Terraform state kept remotely in Azure Storage and authenticated via OIDC rather than static keys. A small Python bridge script converts Terraform's outputs into a generated Ansible inventory, so the configuration stage never needs to know about infrastructure state directly. A chain of GitHub Actions workflows takes over from there: a Terraform apply triggers an Ansible run only once it succeeds.",
         "Every VM in the fleet gets the same baseline through shared Ansible roles regardless of its job: SSH key distribution, common hardening, an EDR agent, a SIEM agent enrolled against the central manager, and a leaf certificate from an internal CA so it can serve TLS the rest of the fleet trusts.",
-        "On top of that shared baseline, each VM carries one specialised role: a self-managed ERP instance on PostgreSQL with scheduled database and filestore backups pushed to Azure Blob Storage; a single-node SIEM manager that every other VM ships logs and audit events to, with a dedicated SSD-backed data disk for the indexer's growing storage; a minimal internal certificate authority issuing the leaf certificates the rest of the fleet trusts, kept deliberately tiny since a CA has almost no footprint; a self-hosted GitHub Actions runner that executes the deploy jobs from inside the network so the hypervisor's management API never needs to be exposed to the internet; the RAG platform's data plane, running LightRAG together with PostgreSQL extended with <code>pgvector</code> and <code>AGE</code> for the vector store and knowledge graph, calling out to a separate GPU host for inference rather than running any heavy model locally; the RAG platform's front door, running Caddy terminating TLS issued by the internal CA, oauth2-proxy enforcing Microsoft Entra single sign-on and group membership, and a FastAPI backend holding the API key server-side; and an internal DNS server, authoritative for internal zones.",
-        "A smaller sandbox VM rounds out the fleet, used to validate changes to the Terraform and Ansible roles themselves before they touch anything production."
+        "<strong>The Odoo host</strong> runs the company's self-managed Odoo ERP instance on PostgreSQL, with scheduled database and filestore backups pushed automatically to Azure Blob Storage via a SAS token.",
+        "<strong>The Wazuh host</strong> is the security backbone of the whole platform: a single-node, all-in-one Wazuh SIEM manager that every other VM ships its logs and audit events to, backed by a dedicated data disk for the indexer's growing storage.",
+        "<strong>The internal CA host</strong> hosts a minimal Smallstep <code>step-ca</code> instance, deliberately kept small since a CA has almost no footprint. It issues the leaf certificates every other VM in the fleet trusts for internal TLS, which is what lets Caddy serve HTTPS on the RAG platform without a public certificate.",
+        "<strong>The self-hosted GitHub Actions runner host</strong> executes the deploy jobs, both the Terraform apply against the Proxmox API and the Ansible run against the rest of the fleet, from inside the network, so the pipeline never needs to expose Proxmox's management API to the internet.",
+        "<strong>The RAG data-plane host</strong> is the largest in the fleet, running LightRAG together with PostgreSQL extended with <code>pgvector</code> and <code>AGE</code> for the vector store and knowledge graph. It holds the uploaded document corpus and per-employee workspaces, but calls out to the DGX Spark host for LLM and embedding inference rather than running any heavy model locally.",
+        "<strong>The RAG platform app host</strong> is the front door of the RAG platform, running Caddy terminating TLS issued by the internal CA, oauth2-proxy enforcing Microsoft Entra single sign-on and group membership, and a FastAPI backend holding the API key server-side so it never reaches a browser.",
+        "<strong>The internal DNS host</strong> runs BIND9, authoritative for internal zones so every fleet service can resolve every other host by name, and forwarding everything else upstream.",
+        "A smaller sandbox host rounds out the fleet, used to validate changes to the Terraform and Ansible roles themselves before they touch anything production."
       ]
     }
   },
@@ -119,6 +125,31 @@
         "The program is structured around the CRA's two real deadlines: a near-term Article 14 reporting obligation that becomes applicable in 2026, and full product conformity against Annex I, II, and VII by the final 2027 deadline.",
         "Working from the regulation text and official EU guidance, broke the requirement down into a tracked checklist of roughly fifty individual controls, spanning vulnerability reporting and coordinated disclosure, SBOM and dependency management, incident response, secure-by-design and secure-by-default engineering practices, access control, data protection, logging, secure update delivery, supply chain and build-pipeline security, conformity assessment and CE marking, and the specific supplier-assurance obligations that apply to OEM-branded hardware.",
         "On top of the checklist, consolidated the resulting documentation requirement into ten Technical File packages aligned to CRA Annex VII, each with a defined owner, evidence location, and priority, so audit-readiness work has a single structure to point to instead of being scattered across teams. Some of the underlying controls, like dependency and vulnerability scanning across the estate, were already in place from prior security engineering work and slotted directly into the new framework rather than needing to be rebuilt."
+      ]
+    }
+  },
+  {
+    "title": "Shift-Left Security: Feature Security Assessments",
+    "desc": "Embedded security review directly into the feature delivery process instead of treating it as a gate at the end. Every new feature gets a security-by-design assessment before implementation starts, so architectural issues get caught when fixing them costs a design change rather than a rewrite.",
+    "tags": ["Shift-Left Security", "Threat Modeling", "Security Review"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "Intended data flows, trust boundaries, authentication and authorization requirements, and likely abuse cases are worked through with the feature team while the design is still on paper, catching architectural issues before a single line of code is written.",
+        "The same feature is checked again after implementation, reviewing the finished work against what was agreed at design time, the actual auth checks in place, input handling, and logging of security-relevant events, to close the gap between what was designed and what actually shipped, before the DAST pipelines and the wider pentest program ever see it."
+      ]
+    }
+  },
+  {
+    "title": "Kubernetes Workloads: Migrating Internal Tools onto AKS",
+    "desc": "Provisioned the company's AKS platform as code and migrated several internal and vendor tools onto it, each as its own Helm chart with its own multi-environment pipeline, riding on shared platform plumbing instead of reinventing TLS and ingress per application.",
+    "tags": ["Azure Kubernetes Service", "Helm", "Gateway API", "cert-manager"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "The AKS platform itself is provisioned in Bicep rather than clicked together by hand: a single template creates the Azure Container Registry and the AKS cluster, with node sizing driven by the target environment (dev, beta, prod), selected automatically from the Git branch. A GitOps-style GitHub Actions pipeline runs that Bicep deployment first, then, from a self-hosted runner with direct access to the cluster, uses Helm to roll out the shared platform plumbing every workload depends on: cert-manager, wired to a per-environment Let's Encrypt issuer, and Envoy Gateway as the cluster's single Gateway API entry point. Keeping that plumbing at the platform level means individual workloads only need to declare a route and a certificate request, not reimplement TLS termination or ingress from scratch.",
+        "<strong>IoT access-controller app</strong> – a vendor's Node.js IoT access-controller application, used to manage the OEM-branded gateways referenced elsewhere in this portfolio, packaged into a Docker image and deployed through its own Helm chart across dev, beta, and prod. The chart exposes the web UI over HTTP and the device-facing MQTT broker over a dedicated Gateway API route, injects the vendor license through a ConfigMap, and provisions persistent storage for application data and logs. A companion CronJob, authenticating purely through Azure Workload Identity rather than a stored credential, backs up the controller's configuration to Blob Storage daily and ships the last 24 hours of device logs into Azure Log Analytics.",
+        "<strong>BookStack</strong> – the company's internal documentation wiki, migrated onto the same cluster as a two-deployment chart (the BookStack application plus its own MariaDB instance), wired up to Microsoft Entra ID for OIDC login and exposed through the shared Gateway API with automatic HTTP-to-HTTPS redirection. A daily backup CronJob dumps the database and file store into a single archive and uploads it to Blob Storage via Azure Workload Identity, with a documented, tested restore procedure."
       ]
     }
   },
