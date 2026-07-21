@@ -1,0 +1,83 @@
+[
+  {
+    "date": "Mar 2025 – Jul 2026",
+    "title": "Master's degree, Cybersecurity",
+    "org": "AGH University of Krakow",
+    "desc": "Graduate studies in cybersecurity, continuing on from the engineering degree below.",
+    "tags": ["Cybersecurity"],
+    "detail": {
+      "label": "graduate coursework highlights",
+      "intro": "90-ECTS, 3-semester accredited graduate program (in progress). Coursework most relevant to the job market:",
+      "items": [
+        "Purple Teaming: combined offensive/defensive exercises bridging red and blue team practice",
+        "Cybersecurity Operations: running and maturing security operations at scale",
+        "Threat Intelligence: collecting, analyzing, and operationalizing threat data",
+        "Detection & Analysis of Computer Threats: building and tuning detection capabilities",
+        "Post-Quantum Cryptography: cryptographic protocols resilient to quantum attacks",
+        "Digital Forensic Data Analysis: forensic examination of digital evidence",
+        "5G & 6G Network Security: securing next-generation mobile infrastructure",
+        "Enterprise Architecture & Risk Management: aligning security with business risk",
+        "Capture the Flag (CTF): competitive, hands-on offensive security practice",
+        "Deep Learning for Cybersecurity Applications: applying AI/ML to detection and analysis"
+      ],
+      "note": "Also included: a full master's thesis, plus dedicated R&D methodology and legal/ethics coursework in cybersecurity."
+    }
+  },
+  {
+    "date": "Oct 2021 – Jan 2025",
+    "title": "Engineer's degree, Cybersecurity",
+    "org": "AGH University of Krakow",
+    "desc": "Undergraduate engineering degree covering cybersecurity, networking, and operating systems.",
+    "tags": ["Cybersecurity"],
+    "detail": {
+      "label": "coursework highlights",
+      "intro": "210-ECTS, 7-semester accredited engineering program. Coursework most relevant to the job market:",
+      "items": [
+        "Penetration Testing: offensive methodology and hands-on exploitation labs",
+        "Incident Management (SOC & CERT): triage, monitoring, and response workflows",
+        "Critical Infrastructure & Industrial Control Systems Security: securing OT/ICS/IIoT environments",
+        "Network & Systems Administration: organizing and administering wired and wireless networks across protocol layers",
+        "Security of ICT Systems & Networks: network security fundamentals across the protocol stack",
+        "Local Area Network (LAN) Security: securing local network infrastructure",
+        "Wireless Network Security: Wi-Fi and radio-layer attack and defense techniques",
+        "Wide Area Network (WAN) Security: routing and large-scale perimeter protection",
+        "Cellular & 5G Network Security: mobile network infrastructure protection",
+        "Secure Network Programming: building network-layer applications with security built in",
+        "Cybersecurity & Cloud Computing: cloud-specific threat models and controls",
+        "Web & Mobile Application Security: AppSec across the SDLC",
+        "Cryptography & Cryptanalysis: applied cryptographic protocols and attacks",
+        "Digital Forensics & Post-Breach Analysis: evidence handling and incident reconstruction",
+        "Malware Analysis: static and dynamic analysis of malicious binaries",
+        "Open-Source Intelligence (OSINT): reconnaissance and information-gathering techniques",
+        "National Cybersecurity System & Information Security Management: policy and ISO 27001-aligned governance"
+      ],
+      "note": "Also included: a mandatory 4-week industry internship and a full engineering thesis project."
+    }
+  },
+  {
+    "date": "Oct 2021 – Oct 2022",
+    "title": "Technologies Security Programme",
+    "org": "EITCA Academy",
+    "desc": "Independent European IT security certification programme (EITCA/IS) covering cryptography, network security, and information security theory.",
+    "tags": ["Cybersecurity", "Certification"],
+    "detail": {
+      "label": "programme highlights",
+      "intro": "EITCA/IS Information Technologies Security Programme, European IT Certification Institute (EITCI), Brussels. 24 ECTS credits earned across component EITC certifications:",
+      "items": [
+        "EITC/IS/CF Cryptography Fundamentals: ciphers, symmetric/asymmetric cryptosystems, PKI, digital signatures",
+        "EITC/CN/SCN1 Computer Networking 1: network layers, TCP/IP, routing, secure protocols (SSL, IPsec, VPN)",
+        "EITC/IS/SMMOS Security Management in Microsoft Operating Systems: Windows hardening, Active Directory, access control, backup/recovery",
+        "EITC/IS/IST Information Security Theory: information theory, entropy, computational complexity, cryptographic foundations",
+        "EITC/QI/QIF Quantum Information & Quantum Computation Fundamentals: qubits, quantum circuits, Quantum Key Distribution",
+        "EITC/IS/EEIS Electronic Economy Information Security: security audits, threat modeling (STRIDE), cryptographic data protection",
+        "EITC/FC/CCT Computational Complexity Theory: Turing machines, NP-completeness, approximation algorithms",
+        "EITC/IS/QCF Quantum Cryptography Fundamentals: QKD protocols (BB84, E91), quantum-safe secure communication",
+        "EITC/CN/SCN2 Computer Networking 2: Ethernet, WLAN security (WEP/WPA), dynamic routing protocols (OSPF, RIP)",
+        "EITC/IS/OS Operating Systems Security: process and file-system security, access control, Unix and Windows hardening",
+        "EITC/IS/ACNS Advanced Computer Networks Security: firewalls, IDS, VPN tunnels, web application attack defense",
+        "EITC/IS/FAIS Formal Aspects of Information Security: security standards (ISO/IEC 27001, ITIL, COBIT), legal frameworks, threat modeling"
+      ],
+      "note": "Certificate ID EITCA/IS/LEH25004484, issued February 2025 by the European IT Certification Institute (EITCI), Brussels."
+    }
+  }
+]

@@ -1,0 +1,71 @@
+[
+  {
+    "title": "RBAC IaC – Azure Access Management as Code",
+    "desc": "Replaced ad-hoc, portal-driven Azure access management with a fully declarative, GitOps-style RBAC pipeline. Every identity, role assignment, and permission boundary across three environments is defined in YAML, reviewed in pull requests, and reconciled automatically, including zero-trust ABAC constraints and time-boxed PIM eligibility for privileged roles.",
+    "tags": ["Azure Entra ID", "RBAC/PIM/ABAC", "GitHub Actions (OIDC)", "Python"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "Each environment lives on its own Git branch with its own YAML config fragments, merged by a small Python script into a single manifest before every deployment. A Bash-based deploy flow drives that manifest against Azure through GitHub Actions' OIDC federation (no stored credentials), creating or updating managed identities, RBAC role assignments, Cosmos DB data-plane roles, and Azure SQL database roles (the latter via Entra-authenticated <code>sqlcmd</code> calls that idempotently create database users and add them to roles).",
+        "Privileged assignments can be marked PIM-eligible with a configurable expiry instead of granted permanently, and ABAC condition strings can be attached directly to role assignments to restrict exactly which roles an identity is allowed to grant, preventing privilege escalation even for administrative identities.",
+        "On every run, the pipeline compares the manifest against live Azure state and removes anything no longer defined in YAML, so configuration drift never accumulates; user-facing role assignments are the one exception, kept additive-only to avoid accidentally locking people out."
+      ]
+    }
+  },
+  {
+    "title": "On-Prem Virtualization Platform as Code",
+    "desc": "Designed and built a self-hosted, on-prem infrastructure platform from the ground up: one push to production provisions VMs with Terraform and configures them with Ansible, covering DNS, internal PKI, SIEM, EDR, and application hosting, with zero manual steps. On top of it: a production RAG (Retrieval-Augmented Generation) platform with SSO, and an ERP host with automated backups.",
+    "tags": ["Proxmox VE", "Terraform", "Ansible", "GitHub Actions (OIDC)", "Wazuh"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "The provisioning layer uses the <code>bpg/proxmox</code> Terraform provider to clone new VMs from a cloud-init template, wiring up CPU, memory, disk, and networking, with Terraform state kept remotely in Azure Storage and authenticated via OIDC rather than static keys. A small Python bridge script converts Terraform's outputs into a generated Ansible inventory, so the configuration stage never needs to know about infrastructure state directly. A chain of GitHub Actions workflows takes over from there: a Terraform apply triggers an Ansible run only once it succeeds.",
+        "Every VM in the fleet gets the same baseline through shared Ansible roles regardless of its job: SSH key distribution, common hardening, an EDR agent, a SIEM agent enrolled against the central manager, and a leaf certificate from an internal CA so it can serve TLS the rest of the fleet trusts.",
+        "On top of that shared baseline, each VM carries one specialised role: a self-managed ERP instance on PostgreSQL with scheduled database and filestore backups pushed to Azure Blob Storage; a single-node SIEM manager that every other VM ships logs and audit events to, with a dedicated SSD-backed data disk for the indexer's growing storage; a minimal internal certificate authority issuing the leaf certificates the rest of the fleet trusts, kept deliberately tiny since a CA has almost no footprint; a self-hosted GitHub Actions runner that executes the deploy jobs from inside the network so the hypervisor's management API never needs to be exposed to the internet; the RAG platform's data plane, running LightRAG together with PostgreSQL extended with <code>pgvector</code> and <code>AGE</code> for the vector store and knowledge graph, calling out to a separate GPU host for inference rather than running any heavy model locally; the RAG platform's front door, running Caddy terminating TLS issued by the internal CA, oauth2-proxy enforcing Microsoft Entra single sign-on and group membership, and a FastAPI backend holding the API key server-side; and an internal DNS server, authoritative for internal zones.",
+        "A smaller sandbox VM rounds out the fleet, used to validate changes to the Terraform and Ansible roles themselves before they touch anything production."
+      ]
+    }
+  },
+  {
+    "title": "Local LLM Inference Host",
+    "desc": "Turned a bare NVIDIA DGX Spark box into a hardened, self-hosted LLM inference platform: several local models served behind an authenticated reverse proxy, speculative decoding for faster responses, and full audit and SIEM visibility into every request. Now the model backend behind an internal RAG platform.",
+    "tags": ["Ansible", "NVIDIA DGX Spark", "llama.cpp", "systemd", "Caddy"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "The core of the setup is an Ansible role that builds <code>llama.cpp</code> from source with CUDA support on the DGX Spark's ARM64 hardware, pinned to a specific upstream commit to guarantee Multi-Token Prediction support, then runs it as a <code>systemd</code>-managed router service exposing several model profiles (including a large MoE model tuned with speculative decoding for lower latency) behind a single API.",
+        "Alongside it, the role deploys and hardens a diffusion model server, OpenWebUI as a chat front-end, and ComfyUI for image and video generation, each as its own <code>systemd</code> unit with its own service user and log files. All of these sit behind a single Caddy reverse proxy that terminates TLS and enforces bearer-token API-key authentication before any request reaches a model.",
+        "To make the host observable rather than a black box, the role also configures structured JSON access logging, persistent journald storage, log rotation, and <code>auditd</code> rules that watch configuration files, secrets, and privileged service commands; it then enrolls the host as a SIEM agent so all of that telemetry flows into the same central monitoring used across the rest of the infrastructure."
+      ]
+    }
+  },
+  {
+    "title": "Azure IaC Program – Migrating a Cloud Estate to Code",
+    "desc": "Beyond individual platforms, a broader effort ported nearly an entire company's Azure estate from manual, portal-driven changes into version-controlled, environment-aware Infrastructure as Code, one domain at a time. Each area got its own Bicep templates and its own GitHub Actions pipeline authenticated via OIDC, following a consistent dev/beta/prod branching pattern.",
+    "tags": ["Azure Bicep", "AKS", "Application Gateway (WAF)", "Microsoft Sentinel"],
+    "detail": {
+      "label": "technical breakdown",
+      "paragraphs": [
+        "<strong>Networking</strong> – core VNets for dev, beta, and prod, each with its own non-overlapping address space, subnets for database, web, storage, key vault, function app, and API management workloads, private DNS zones, and DMZ peering, all provisioned from a single parameterised Bicep template.",
+        "<strong>DMZ</strong> – the public edge of the network: a dedicated DMZ VNet peered to the intranet, and an Application Gateway (WAF_v2) with its listeners, backend pools, probes, routing rules, redirects, and rewrites.",
+        "<strong>WAF rules</strong> – the Web Application Firewall policy attached to that gateway: custom rule sets, log scrubbing for sensitive fields such as passwords, environment-aware switching between detection and prevention mode, and a temporary, time-boxed pentest IP allowlist for non-production.",
+        "<strong>Storage estate</strong> – a primary and geo-replicated SQL Server pair behind a manual-failover group, two Cosmos DB accounts, and their supporting storage account, checked against the live environment with <code>az deployment group what-if</code> until the plan showed zero creates or deletes: a faithful, drift-free match for what was already running in production.",
+        "<strong>Static frontend hosting</strong> – Storage-Account-backed static website hosting behind private endpoints, with public blob access and shared-key authentication disabled and RBAC enforced.",
+        "<strong>AKS platform</strong> – an Azure Kubernetes Service cluster and Container Registry in Bicep, with a GitOps-style pipeline that follows infrastructure provisioning with a Helm-based rollout of Envoy Gateway and cert-manager for automated Let's Encrypt certificates.",
+        "<strong>Security tooling</strong> – Microsoft Defender for Cloud and Defender for Storage with environment-appropriate coverage, Microsoft Sentinel, subscription and resource diagnostic settings, and an automated Function App that renews Let's Encrypt certificates in Key Vault in response to expiry notifications.",
+        "Access to every resource provisioned across this estate is, in turn, governed by the RBAC pipeline above, closing the loop between what gets deployed and who is allowed to touch it."
+      ]
+    }
+  },
+  {
+    "title": "ConsultIT – Security Assessment Report",
+    "desc": "Laureate project for the ConsultIT competition (SGH, with Accenture, LOT, P&G, Allegro, GFT). Advanced through a CTF qualifier, then analyzed a real company's systems, processes, and architecture in the final, proposing concrete security improvements.",
+    "tags": ["CTF", "Security Assessment", "Team Project"],
+    "_note": "Write-up lives in a private repo (github.com/JakubMlocek/CTF). Make it public and add a \"repo\" field above to link it."
+  },
+  {
+    "title": "HackAGH 2023 – Autonomous Vehicle App",
+    "desc": "Finalist at HackAGH, a team hackathon organized by URSS AGH on autonomous-vehicle automotive tech. Devised a creative autonomous-car feature and built a mobile app prototype, presented live to a jury in the final.",
+    "tags": ["Hackathon", "Mobile App", "Team Project"]
+  }
+]
