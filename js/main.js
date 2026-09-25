@@ -417,6 +417,8 @@ navLinksEl.querySelectorAll("a").forEach(a => {
   a.addEventListener("click", () => {
     navLinksEl.classList.remove("open");
     navToggle.setAttribute("aria-expanded", "false");
+    // Highlight the clicked section immediately.
+    navLinks.forEach(link => link.classList.toggle("active", link === a));
   });
 });
 
