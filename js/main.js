@@ -378,21 +378,28 @@ document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
    Active nav link on scroll
    ========================================================================== */
 
-const sections = document.querySelectorAll("main .section");
+const sections = Array.from(document.querySelectorAll("main .section"));
 const navLinks = document.querySelectorAll(".nav-link");
 
-const navObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const id = entry.target.getAttribute("id");
-      navLinks.forEach(link => {
-        link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
-      });
-    }
+const setActiveNav = () => {
+  const pos = window.scrollY + window.innerHeight * 0.35;
+  let current = sections[0];
+  for (const s of sections) {
+    if (s.offsetTop <= pos) current = s;
+  }
+  // At the bottom of the page, always highlight the last section.
+  if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
+    current = sections[sections.length - 1];
+  }
+  const id = current ? current.getAttribute("id") : null;
+  navLinks.forEach(link => {
+    link.classList.toggle("active", id !== null && link.getAttribute("href") === `#${id}`);
   });
-}, { threshold: 0.4, rootMargin: "-64px 0px -40% 0px" });
+};
 
-sections.forEach(section => navObserver.observe(section));
+window.addEventListener("scroll", setActiveNav, { passive: true });
+window.addEventListener("resize", setActiveNav);
+setActiveNav();
 
 /* ==========================================================================
    Mobile nav toggle
