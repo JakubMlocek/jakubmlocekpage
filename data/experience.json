@@ -3,39 +3,54 @@
     "date": "Nov 2024 – Present",
     "title": "Cybersecurity Engineer",
     "org": "RBC Bearings · Kraków, Poland · Hybrid",
-    "desc": "Covering DevSecOps, Azure cloud security, penetration testing, and security engagements across the company's platform and infrastructure.",
-    "tags": ["DevSecOps", "Azure", "Sentinel", "Penetration Testing", "ISO 27001"],
+    "desc": "Sole Security Engineer driving end-to-end security across the entire project portfolio.",
+    "tags": ["DevSecOps", "Azure", "Sentinel", "Wazuh", "Terraform", "Penetration Testing", "ISO 27001"],
     "detail": {
       "label": "job details",
       "groups": [
         {
-          "label": "DevSecOps",
+          "label": "Azure Cloud Security Engineering",
           "items": [
-            "Covered the platform with dynamic application security scanning (OWASP ZAP, SQLmap).",
-            "Covered repositories with static analysis via GitHub Advanced Security: CodeQL, Dependabot, Secret Scanning.",
-            "Conducted shift-left security assessments."
+            "Designing and deploying Azure infrastructure for platform and business projects per best practices.",
+            "Hardening Azure resources and implementing network security.",
+            "Classifying data across Azure resources to enforce backup strategies and security controls.",
+            "Developing Bicep IaC with CI/CD pipelines for multi-environment deployments and disaster recovery.",
+            "Implementing Azure WAF from scratch and performing ongoing policy tuning.",
+            "Acting as an L2 SOC Engineer: developing Microsoft Sentinel analytics rules, investigating incidents, and analyzing logs with KQL."
           ]
         },
         {
-          "label": "Azure Cloud Security",
+          "label": "Implementing & Maintaining DevSecOps Practices",
           "items": [
-            "Built Infrastructure as Code for Azure resources using Bicep.",
-            "Tuned Azure Web Application Firewall rules.",
-            "Authored Microsoft Sentinel analytics rules; investigated and resolved security incidents.",
-            "Queried and analyzed logs using KQL."
+            "Automating DAST across the platform using OWASP ZAP and sqlmap.",
+            "Enforcing SAST and supply-chain security via GitHub Advanced Security (CodeQL, Dependabot, Secret Scanning).",
+            "Developing GitHub security automations.",
+            "Conducting shift-left security assessments."
           ]
         },
         {
-          "label": "Penetration Testing",
+          "label": "Security Engagements & Governance",
           "items": [
-            "Performed internal penetration tests across Web, API, and IIoT surfaces."
+            "Designing and implementing ISO 27001 policies, procedures, and EU Cyber Resilience Act compliance controls.",
+            "Completing client security assessments.",
+            "Leading security awareness meetings and delivering biweekly platform security reports.",
+            "Architecting security controls for IIoT devices."
           ]
         },
         {
-          "label": "Security Engagements",
+          "label": "On-Premises Infrastructure Architecture & Administration",
           "items": [
-            "Ran cybersecurity awareness sessions and implemented ISO 27001 policies.",
-            "Completed client security assessments and biweekly platform security status reports."
+            "Designing and implementing local Proxmox environment via GitHub Actions CI/CD (Terraform, Ansible, self-hosted runner).",
+            "Administering an internal ERP/CRM with SSO integration, automated backups, and hardening.",
+            "Building internal LLM platforms (vLLM, llama.cpp, Open WebUI).",
+            "Deploying PoC servers (LightRAG, PostHog, ZeroTier) and core infrastructure: SIEM (Wazuh), internal CA (step-ca), and DNS."
+          ]
+        },
+        {
+          "label": "Penetration Testing & Vulnerability Management",
+          "items": [
+            "Conducting internal penetration tests across Web, API, and IIoT environments.",
+            "Coordinating external penetration tests and implementing remediations."
           ]
         }
       ]
