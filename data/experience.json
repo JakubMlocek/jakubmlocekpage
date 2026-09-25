@@ -71,5 +71,47 @@
         "Administered and maintained Linux systems."
       ]
     }
+  },
+  {
+    "date": "Oct 2020 – Oct 2023",
+    "title": "Computer Science Tutor",
+    "org": "Self-employed · Kraków, Poland (remote)",
+    "desc": "Preparing students for the extended Computer Science Matura exam and supporting university-level coursework.",
+    "tags": ["C++", "Python", "SQL", "MS Access", "MS Excel", "Algorithms"],
+    "detail": {
+      "label": "job details",
+      "groups": [
+        {
+          "label": "Matura Exam Preparation (Extended Computer Science)",
+          "items": [
+            "Building theoretical foundations.",
+            "Analyzing and teaching how to write original algorithms.",
+            "SQL with MS Access and MS Excel."
+          ]
+        },
+        {
+          "label": "University-level Support",
+          "items": [
+            "Cybersecurity.",
+            "Computer networks.",
+            "Operating systems."
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "date": "Jul 2018 – Aug 2023",
+    "title": "Sea Lifeguard (seasonal)",
+    "org": "Jastarnia Town Office · Jastarnia, Poland · On-site",
+    "desc": "Five seasons of seasonal work at Baltic Sea bathing beaches in the Jastarnia municipality.",
+    "tags": ["Water Lifeguard License", "Powerboat Operator"],
+    "detail": {
+      "label": "job details",
+      "items": [
+        "Certified Water Lifeguard (KPP).",
+        "Powerboat operator."
+      ]
+    }
   }
 ]
