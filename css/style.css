@@ -277,6 +277,8 @@ h1, h2, h3 { font-family: var(--font-head); margin: 0; }
   max-width: 52ch;
   font-size: 1.02rem;
   margin-bottom: 32px;
+  text-align: justify;
+  hyphens: auto;
 }
 
 .hero-actions {
