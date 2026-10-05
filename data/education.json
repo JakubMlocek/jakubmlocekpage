@@ -3,11 +3,11 @@
     "date": "Mar 2025 – Jul 2026",
     "title": "Master's degree, Cybersecurity",
     "org": "AGH University of Krakow",
-    "desc": "Graduate studies in cybersecurity, continuing on from the engineering degree below.",
+    "desc": "Completed M.Sc. Eng. degree in cybersecurity with a defended master's thesis, building on the engineering degree below.",
     "tags": ["Cybersecurity"],
     "detail": {
       "label": "graduate coursework highlights",
-      "intro": "90-ECTS, 3-semester accredited graduate program (in progress). Coursework most relevant to the job market:",
+      "intro": "90-ECTS, 3-semester accredited graduate program, completed in July 2026. Coursework most relevant to the job market:",
       "items": [
         "Purple Teaming: combined offensive/defensive exercises bridging red and blue team practice",
         "Cybersecurity Operations: running and maturing security operations at scale",
@@ -20,7 +20,7 @@
         "Capture the Flag (CTF): competitive, hands-on offensive security practice",
         "Deep Learning for Cybersecurity Applications: applying AI/ML to detection and analysis"
       ],
-      "note": "Also included: a full master's thesis, plus dedicated R&D methodology and legal/ethics coursework in cybersecurity."
+      "note": "Also included: a defended master's thesis, plus dedicated R&D methodology and legal/ethics coursework in cybersecurity."
     }
   },
   {
