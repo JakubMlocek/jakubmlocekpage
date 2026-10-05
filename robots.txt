@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jakubmlocek.github.io/jakubmlocekpage/sitemap.xml

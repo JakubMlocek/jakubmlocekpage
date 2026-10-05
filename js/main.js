@@ -116,11 +116,16 @@ function renderModalBody(p) {
   `;
 }
 
-function openModal() {
+let modalReturnFocus = null;
+
+function openModal(label) {
+  modalReturnFocus = document.activeElement;
+  projectModalPanel.setAttribute("aria-label", label);
   projectModal.classList.add("open");
   projectModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
-  projectModalBody.scrollTop = 0;
+  projectModalPanel.scrollTop = 0;
+  projectModalPanel.focus({ preventScroll: true });
 }
 
 function openProjectModal(index) {
@@ -128,7 +133,7 @@ function openProjectModal(index) {
   if (!p) return;
   projectModalPanel.classList.remove("image-mode");
   projectModalBody.innerHTML = renderModalBody(p);
-  openModal();
+  openModal(p.title);
 }
 
 function openCertModal(index) {
@@ -136,13 +141,17 @@ function openCertModal(index) {
   if (!c || !c.image) return;
   projectModalPanel.classList.add("image-mode");
   projectModalBody.innerHTML = `<img class="cert-modal-image" src="${c.image}" alt="${c.name} certificate">`;
-  openModal();
+  openModal(`${c.name} certificate`);
 }
 
 function closeProjectModal() {
   projectModal.classList.remove("open");
   projectModal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
+  if (modalReturnFocus && document.contains(modalReturnFocus)) {
+    modalReturnFocus.focus({ preventScroll: true });
+  }
+  modalReturnFocus = null;
 }
 
 document.addEventListener("click", (e) => {
@@ -169,32 +178,70 @@ document.addEventListener("click", (e) => {
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && projectModal.classList.contains("open")) closeProjectModal();
+  if (!projectModal.classList.contains("open")) return;
+  if (e.key === "Escape") {
+    closeProjectModal();
+    return;
+  }
+  // Keep keyboard focus inside the dialog while it is open.
+  if (e.key === "Tab") {
+    const focusable = Array.from(
+      projectModalPanel.querySelectorAll("a[href], button:not([disabled])")
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+    if (!projectModalPanel.contains(active) || active === projectModalPanel) {
+      e.preventDefault();
+      (e.shiftKey ? last : first).focus();
+    } else if (e.shiftKey && active === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
 });
 
 function renderCertifications(containerId, items) {
   certificationsData = items;
   const el = document.getElementById(containerId);
   if (!el) return;
+  // Cards with a certificate image are real buttons, so they work from the keyboard.
   el.innerHTML = items.map((c, i) => `
-    <div class="cert-card ${c.image ? "has-image" : ""}" ${c.image ? `data-cert-index="${i}"` : ""}>
-      <span class="cert-icon">
+    <${c.image ? `button type="button" data-cert-index="${i}" aria-label="View certificate: ${c.name}"` : "div"} class="cert-card ${c.image ? "has-image" : ""}">
+      <span class="cert-icon" aria-hidden="true">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M12 2 3 6v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V6l-9-4Z"/>
           <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </span>
-      <div>
-        <p class="cert-name">${c.name}</p>
-        <p class="cert-meta">${c.issuer} · ${c.meta}</p>
-      </div>
+      <span>
+        <span class="cert-name">${c.name}</span>
+        <span class="cert-meta">${c.issuer} · ${c.meta}</span>
+      </span>
       ${c.image ? `<span class="cert-view-hint" aria-hidden="true">View →</span>` : ""}
-    </div>
+    </${c.image ? "button" : "div"}>
   `).join("");
 }
 
+/* Everything a project says, as plain lowercase text: title, summary, tags,
+   and the full write-up shown in the modal. Used by the search box. */
+function projectSearchText(p) {
+  const d = p.detail || {};
+  const parts = [p.title, p.desc, ...(p.tags || []), d.intro, d.note, ...(d.items || []), ...(d.paragraphs || [])];
+  (d.groups || []).forEach(g => parts.push(g.label, ...(g.items || [])));
+  const tmp = document.createElement("div");
+  tmp.innerHTML = parts.filter(Boolean).join(" ");
+  return tmp.textContent.toLowerCase();
+}
+
+let projectsSearchText = [];
+
 function renderProjects(containerId, items) {
   projectsData = items;
+  projectsSearchText = items.map(projectSearchText);
   const el = document.getElementById(containerId);
   el.innerHTML = items.map((p, i) => `
     <article class="project-card reveal ${p.detail ? "has-detail" : ""}" ${p.detail ? `data-project-index="${i}"` : ""}>
@@ -221,21 +268,20 @@ function renderProjects(containerId, items) {
         </button>
       ` : ""}
     </article>
-  `).join("") + `
-    <div class="project-card placeholder reveal">+ More projects coming soon</div>
-  `;
+  `).join("");
 }
 
 /* ==========================================================================
    Project search — filters cards by keyword against title, description,
-   and tags; matching tags get highlighted so it's obvious what hit.
+   tags, and the full write-up; matching tags get highlighted so it's
+   obvious what hit.
    ========================================================================== */
 
 function filterProjects(rawQuery) {
   const query = rawQuery.trim().toLowerCase();
   const grid = document.getElementById("projectsGrid");
   if (!grid) return;
-  const cards = grid.querySelectorAll(".project-card:not(.placeholder)");
+  const cards = grid.querySelectorAll(".project-card");
   let visibleCount = 0;
 
   cards.forEach((card, i) => {
@@ -251,15 +297,11 @@ function filterProjects(rawQuery) {
 
     const isVisible = query.length === 0 ||
       tagMatch ||
-      p.title.toLowerCase().includes(query) ||
-      p.desc.toLowerCase().includes(query);
+      (projectsSearchText[i] || "").includes(query);
 
     card.classList.toggle("search-hidden", !isVisible);
     if (isVisible) visibleCount++;
   });
-
-  const placeholder = grid.querySelector(".project-card.placeholder");
-  if (placeholder) placeholder.classList.toggle("search-hidden", query.length > 0);
 
   const countEl = document.getElementById("projectSearchCount");
   const emptyEl = document.getElementById("projectSearchEmpty");
@@ -334,6 +376,11 @@ const ROLES = [
 (function typeLoop() {
   const el = document.getElementById("roleTyped");
   if (!el) return;
+  // Respect "reduce motion": show the primary role without the typing loop.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    el.textContent = ROLES[0];
+    return;
+  }
   let roleIndex = 0, charIndex = 0, deleting = false;
 
   function tick() {
@@ -429,7 +476,7 @@ navLinksEl.querySelectorAll("a").forEach(a => {
 const backToTop = document.getElementById("backToTop");
 window.addEventListener("scroll", () => {
   backToTop.classList.toggle("visible", window.scrollY > 600);
-});
+}, { passive: true });
 backToTop.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
