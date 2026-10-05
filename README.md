@@ -10,7 +10,7 @@ Static site (plain HTML/CSS/JS, no build step), hosted on GitHub Pages.
 - `css/style.css`: styling (dark theme, animations, responsive layout)
 - `js/main.js`: rendering and interactivity. You shouldn't need to touch this for everyday edits.
 - `data/`: **the content you actually edit** — see below
-- `assets/`: put `profile.jpg` (your photo) and `cv.pdf` (your CV) here
+- `assets/`: put `profile.jpg` (your photo) and `JakubMlocek_CV.pdf` (your CV) here
   - Strip metadata (GPS, device, date) from photos before committing, and regenerate `profile.webp` after changing `profile.jpg` (`cwebp -q 82 assets/profile.jpg -o assets/profile.webp`).
   - `assets/fonts/` + `css/fonts.css`: self-hosted fonts (no requests to Google Fonts).
 - `404.html`, `robots.txt`, `sitemap.xml`: served as-is by GitHub Pages
